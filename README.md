@@ -54,7 +54,7 @@ This project solves that by acting as a senior software engineer mentor that:
 - Maintains continuity using memory
 
 ## Project Structure
-
+```bash
 code-guide-agent/
 ├── agent.yaml
 ├── SOUL.md
@@ -70,7 +70,7 @@ code-guide-agent/
 ├── projects/
 ├── knowledge/
 └── examples/
-
+```
 ## How It Works
 
 User Input → Skill Orchestrator → Memory + Difficulty → Skill → Tool Execution → Hooks → Memory Update
@@ -85,7 +85,11 @@ User Input → Skill Orchestrator → Memory + Difficulty → Skill → Tool Exe
 ### Setup
 ```bash
 git clone https://github.com/JoeChala/code-guide-agent
+```
+```bash
 cd code-guide-agent
+```
+```bash
 npm install
 ```
 
