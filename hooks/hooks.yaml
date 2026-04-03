@@ -1,0 +1,19 @@
+hooks:
+  on_session_start:
+    - script: scripts/load-memory.sh
+      description: Load existing user memory into context
+
+  pre_tool_use:
+    - script: scripts/validate-write.sh
+      description: Prevent unsafe or malformed memory/path writes
+
+  post_response:
+    - script: scripts/update-memory.js
+      description: Update MEMORY.md with latest progress
+
+    - script: scripts/save-paths.sh
+      description: Persist newly generated learning paths
+
+  on_error:
+    - script: scripts/error-handler.sh
+      description: Handle failures and log issues safely
