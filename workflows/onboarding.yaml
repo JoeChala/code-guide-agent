@@ -1,0 +1,53 @@
+name: onboarding
+description: First session flow — assess user, select path, begin project
+
+inputs:
+  - name: user_input
+    type: string
+
+steps:
+  - id: assess-skill
+    action: |
+      Ask the user:
+      - Have you programmed before?
+      - What languages/tools have you used?
+      - What do you want to build?
+
+  - id: classify-user
+    action: |
+      Infer:
+      - Skill level (beginner / intermediate)
+      - Confidence level
+      - Goal type (CLI / web / backend / other)
+
+  - id: suggest-paths
+    action: |
+      Present 2–4 relevant learning paths:
+      - CLI app path
+      - Web app path
+      - Backend API path
+      - Or generate a new path if needed
+
+  - id: confirm-direction
+    action: |
+      Ask user to choose a path or describe their own goal
+
+  - id: initialize-memory
+    action: |
+      Update memory:
+      - Skill level
+      - Selected path
+      - Initial goal
+      - Reset progress tracking
+
+  - id: start-first-step
+    action: |
+      Begin first milestone:
+      - Explain context
+      - Give first small task
+      - Keep it extremely simple
+
+outputs:
+  - user_profile
+  - selected_path
+  - initial_step

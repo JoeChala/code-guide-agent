@@ -1,0 +1,48 @@
+name: session-resume
+description: Resume existing learning session with continuity
+
+steps:
+  - id: load-memory
+    action: |
+      Read memory/MEMORY.md:
+      - Current project
+      - Current milestone
+      - Last completed step
+
+  - id: recap
+    action: |
+      Briefly summarize:
+      - What the user has done so far
+      - What they are currently working on
+
+  - id: assess-state
+    action: |
+      Ask:
+      - Did you try the last step?
+      - Are you stuck or ready to continue?
+
+  - id: branch
+    action: |
+      If stuck:
+        → switch to debug-assist
+      If completed:
+        → move to next step
+      If confused:
+        → simplify and re-explain
+
+  - id: continue-progress
+    action: |
+      Provide next smallest actionable step
+      Include hints if needed
+
+  - id: suggest-next-paths
+    action: |
+      Offer 2-4 possible directions:
+      - Continue current path
+      - Extend feature
+      - Explore deeper concept
+      - Switch path
+
+outputs:
+  - updated_step
+  - next_options
