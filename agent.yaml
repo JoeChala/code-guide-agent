@@ -22,7 +22,9 @@ tools:
   - read
   - write
   - memory
-
+  - scaffold-project
+  - update-memory
+  
 runtime:
   max_turns: 100
   timeout: 300

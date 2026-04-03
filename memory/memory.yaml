@@ -1,0 +1,15 @@
+layers:
+  - name: working
+    path: MEMORY.md
+    max_lines: 200
+
+  - name: learning_paths
+    path: learning-paths/
+    format: markdown
+
+update_triggers:
+  - on_session_end
+  - on_progress
+
+archive_policy:
+  max_entries: 500

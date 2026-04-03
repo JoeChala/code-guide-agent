@@ -1,0 +1,11 @@
+name: scaffold-project
+description: Generate project from template
+input_schema:
+  properties:
+    template:
+      type: string
+      description: Template name (cli-node, express-api, react-app)
+    target:
+      type: string
+      description: Target directory
+  required: [template, target]

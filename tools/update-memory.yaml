@@ -1,0 +1,11 @@
+name: update-memory
+description: Update MEMORY.md with structured state
+input_schema:
+  properties:
+    skill_level:
+      type: string
+    current_project:
+      type: string
+    current_step:
+      type: string
+  required: [current_project]
