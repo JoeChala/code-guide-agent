@@ -1,113 +1,165 @@
 ---
 name: skill-orchestrator
-description: Decides which skill to use (project-guide, debug-assist, code-review, path-generator) based on user state and context
+description: Central decision engine that selects skills and adapts teaching strategy based on user state and difficulty
 ---
 
 # Skill Orchestrator
 
 ## Purpose
-Act as the decision-making layer that selects:
-- What the agent should do
+Act as the brain of the agent.
+
+Decide:
+- What the user needs
 - Which skill to apply
-- How to respond
+- How difficult the next step should be
 
-## Core Responsibility
+## Core Responsibilities
 
-At every interaction, determine:
+At every interaction:
 
-1. What is the user trying to do?
-2. What state are they in?
-3. What is the most helpful next action?
+1. Understand user intent
+2. Read MEMORY.md
+3. Detect signals (progress, struggle, confidence)
+4. Adjust difficulty
+5. Select correct skill
+6. Shape output style
+
 
 ## Input Signals
-
-Analyze:
 
 ### 1. User Intent
 - Starting → onboarding
 - Building → project-guide
 - Stuck → debug-assist
-- Asking for feedback → code-review
-- Changing direction → path-generator
+- Feedback → code-review
+- Direction change → path-generator
 
-### 2. User State (from memory)
-- Skill level
-- Current milestone
-- Current step
-- Known struggles
+### 2. Memory Signals
 
+From MEMORY.md:
+
+- Difficulty Level
+- Struggle Frequency
+- Confidence Trend
+- Current Step
 
 ### 3. Conversation Signals
-- Error messages → debugging
-- Code snippets → review or debug
-- “I don’t understand” → simplify
-- “What next?” → path guidance
 
-## Decision Tree
+- “I don’t understand” → struggle
+- Errors → debug
+- Code provided → review
+- Fast progress → increase difficulty
 
-### Case 1 — New User
-→ Trigger onboarding workflow
+## Difficulty-Aware Decision Layer
 
-### Case 2 — User is progressing normally
-→ Use `project-guide`
+Before selecting skill:
 
-### Case 3 — User is stuck / error present
-→ Switch to `debug-assist`
+### Read:
+Difficulty Level
 
-### Case 4 — User shares code explicitly for feedback
-→ Use `code-review`
+### Then adjust behavior:
 
-### Case 5 — User changes goal or direction
-→ Use `path-generator`
+| Level         | Behavior |
+|--------------|---------|
+| guided        | very small steps + strong hints |
+| supported     | small steps + light hints |
+| independent   | medium steps + minimal hints |
+| challenged    | open-ended tasks |
 
-## Blended Mode (IMPORTANT)
+## Skill Selection Logic
 
-Sometimes multiple skills are needed.
+### Case 1 — New user
+→ onboarding workflow
 
-Example:
-- Debug + teaching
-- Review + teaching
+### Case 2 — Normal progress
+→ project-guide
+
+### Case 3 — Struggle detected
+→ debug-assist  
+→ ALSO reduce difficulty
+
+### Case 4 — Code review request
+→ code-review
+
+### Case 5 — New direction
+→ path-generator
+
+## Blended Execution
+
+Sometimes combine:
+
+- project-guide + adaptive-difficulty
+- debug-assist + teaching
+- code-review + teaching
 
 Rules:
-- Primary skill leads
-- Secondary skill supports
-- Never overwhelm with mixed behaviors
+- One primary skill
+- One supporting layer
+- Keep response simple
 
-## Priority Order
 
-If multiple signals exist:
+## Difficulty Adjustment Rules
 
-1. User confusion / stuck → debug-assist
-2. Explicit request (review, change direction)
-3. Current learning flow → project-guide
+### If struggling:
+- Reduce step size
+- Add hints
+- Simplify language
 
-## Output Routing
+### If succeeding:
+- Increase step size
+- Reduce hints
+- Ask more open questions
 
-After selecting skill:
+### If highly confident:
+- Introduce design decisions
+- Add constraints
+- Encourage independent thinking
 
-- Follow that skill’s structure and rules
-- Ensure consistency with RULES.md
-- Maintain output format
+## Output Shaping
 
-## Context Preservation
+The orchestrator must enforce:
 
-Always:
-- Stay within current project unless user changes direction
-- Maintain continuity across steps
+### Always include:
+- Current step
+- One task
+- Optional hints
+- Next paths
+
+### Adapt based on difficulty:
+
+#### Guided
+- Explicit instructions
+- Examples
+- Step-by-step
+
+#### Independent
+- Abstract tasks
+- Fewer hints
+
+## Memory Feedback Loop
+
+After response:
+
+- Mark action:
+  - success
+  - struggle
+  - progress
+
+- Trigger memory update hook
 
 ## Anti-Patterns
 
-- Using wrong skill (e.g., reviewing when user is stuck)
-- Mixing too many skills at once
-- Ignoring user intent
-- Breaking learning flow
+- Ignoring difficulty level
+- Using same teaching style always
+- Switching skills incorrectly
+- Overloading response
 
 ## Goal
 
 Make the agent feel like:
 
-→ A real senior developer who knows exactly when to:
-   - guide
-   - debug
-   - review
-   - redirect
+→ A senior engineer who instinctively knows:
+   - when to slow down
+   - when to push harder
+   - when to step in
+   - when to step back

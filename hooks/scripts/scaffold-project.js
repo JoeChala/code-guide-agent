@@ -16,9 +16,22 @@ function copyDir(src, dest) {
   }
 }
 
-const template = process.argv[2]; // e.g. cli-node
-const target = process.argv[3];   // e.g. projects/todo-cli
+const template = process.env.TEMPLATE;
+const projectName = process.env.PROJECT_NAME;
 
-copyDir(`templates/${template}`, target);
+if (!template || !projectName) {
+  console.log("No scaffolding triggered");
+  process.exit(0);
+}
 
-console.log(`Project scaffolded at ${target}`);
+const targetDir = `projects/${projectName}`;
+
+// Prevent overwrite
+if (fs.existsSync(targetDir)) {
+  console.log("Project already exists, skipping");
+  process.exit(0);
+}
+
+copyDir(`templates/${template}`, targetDir);
+
+console.log(`Project created at ${targetDir}`);

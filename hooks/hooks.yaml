@@ -15,7 +15,7 @@ hooks:
       description: Persist new learning paths into memory/learning-paths/
 
     - script: scripts/scaffold-project.js
-      description: Generate real project files from templates/
+      description: Generate real project files from templates/ if triggered
 
   on_error:
     - script: scripts/error-handler.sh

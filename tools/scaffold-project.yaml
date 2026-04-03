@@ -1,11 +1,17 @@
 name: scaffold-project
-description: Generate project from template
+description: Scaffold a real project from predefined templates
+
 input_schema:
   properties:
     template:
       type: string
-      description: Template name (cli-node, express-api, react-app)
-    target:
+      enum: [cli-node, express-api, react-app]
+    project_name:
       type: string
-      description: Target directory
-  required: [template, target]
+    target_dir:
+      type: string
+  required: [template, project_name]
+
+annotations:
+  requires_confirmation: false
+  read_only: false
