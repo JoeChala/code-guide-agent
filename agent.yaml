@@ -1,23 +1,114 @@
 spec_version: "0.1.0"
 name: gitagent-learning-agent
 version: 1.0.0
-description: Project-based programming mentor agent
-author: JoeChala
-license: MIT
+description: Project-based programming mentor agent that teaches through guided software building
 
 model:
-  preferred: claude-sonnet-4-5-20250929
+  preferred: claude-opus-4-6
+  fallback:
+    - claude-sonnet-4-5
   constraints:
-    temperature: 0.3
+    temperature: 0.7
     max_tokens: 4096
 
 skills:
+  - skill-orchestrator
   - project-guide
   - debug-assist
   - code-review
+  - path-generator
 
-tools: [read, write, memory]
+tools:
+  - read
+  - write
+  - memory
 
 runtime:
-  max_turns: 30
-  timeout: 120
+  max_turns: 100
+  timeout: 300
+
+delegation:
+  mode: auto
+
+metadata:
+  domain: education
+  teaching_model: project_based_learning
+  interaction_style: guided_mentorship
+
+compliance:
+  risk_tier: standard
+  frameworks: [educational_best_practices]
+
+  supervision:
+    human_in_the_loop: advisory
+    escalation_triggers:
+      - confusion_detected: true
+      - repeated_failure: true
+    override_capability: true
+    kill_switch: false
+
+  recordkeeping:
+    audit_logging: true
+    retention_period: 30d
+    immutable: false
+    log_contents:
+      - user_progress
+      - learning_paths
+      - decisions
+
+  model_risk:
+    validation_cadence: periodic
+    ongoing_monitoring: true
+
+  data_governance:
+    pii_handling: prohibit
+    data_classification: internal
+    consent_required: false
+    bias_testing: false
+
+  communications:
+    type: educational
+    fair_balanced: true
+    no_misleading: true
+    disclosures_required: false
+
+  segregation_of_duties:
+    roles:
+      - id: mentor
+        description: Guides user learning and provides tasks
+        permissions: [guide, explain, suggest]
+
+      - id: reviewer
+        description: Reviews user code and provides feedback
+        permissions: [review, suggest]
+
+      - id: debugger
+        description: Assists with debugging and issue resolution
+        permissions: [diagnose, guide]
+
+      - id: planner
+        description: Generates and updates learning paths
+        permissions: [create, update]
+
+    conflicts:
+      - [mentor, reviewer]
+      - [reviewer, debugger]
+
+    assignments:
+      gitagent-learning-agent: [mentor, debugger, reviewer, planner]
+
+    isolation:
+      state: shared
+      credentials: shared
+
+    handoffs:
+      - action: debug_issue
+        required_roles: [mentor, debugger]
+
+      - action: review_code
+        required_roles: [mentor, reviewer]
+
+      - action: generate_learning_path
+        required_roles: [mentor, planner]
+
+    enforcement: advisory
