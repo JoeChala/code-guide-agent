@@ -1,22 +1,19 @@
 hooks:
   on_session_start:
     - script: scripts/load-memory.sh
-      description: Load existing user memory into context
+      description: Load memory into context
 
   pre_tool_use:
     - script: scripts/validate-write.sh
-      description: Prevent unsafe or malformed writes (memory, paths, projects)
+      description: Validate safe file operations
 
-  post_response:
+  post_tool_use:
     - script: scripts/update-memory.js
-      description: Update MEMORY.md with structured user progress
+      description: Update structured memory after tool execution
 
     - script: scripts/save-paths.sh
-      description: Persist new learning paths into memory/learning-paths/
-
-    - script: scripts/scaffold-project.js
-      description: Generate real project files from templates/ if triggered
+      description: Persist generated learning paths
 
   on_error:
     - script: scripts/error-handler.sh
-      description: Log errors and prevent agent failure cascade
+      description: Log runtime errors

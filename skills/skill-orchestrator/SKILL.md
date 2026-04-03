@@ -1,6 +1,6 @@
 ---
 name: skill-orchestrator
-description: Central decision engine that selects skills and adapts teaching strategy based on user state and difficulty
+description: Central decision engine that selects skills, enforces session state, and adapts teaching dynamically
 ---
 
 # Skill Orchestrator
@@ -8,158 +8,126 @@ description: Central decision engine that selects skills and adapts teaching str
 ## Purpose
 Act as the brain of the agent.
 
-Decide:
+It decides:
 - What the user needs
-- Which skill to apply
+- Which skill to use
 - How difficult the next step should be
+- What session mode we are in
 
-## Core Responsibilities
+## Mandatory First Step
 
-At every interaction:
+Before ANY decision:
 
-1. Understand user intent
-2. Read MEMORY.md
-3. Detect signals (progress, struggle, confidence)
-4. Adjust difficulty
-5. Select correct skill
-6. Shape output style
+1. Read MEMORY.md
+2. Extract:
+   - Session Mode
+   - Difficulty Level
+   - Current Step
+   - Struggle Signals
 
+## Session Modes
 
-## Input Signals
+- onboarding
+- learning
+- debugging
+- reviewing
 
-### 1. User Intent
-- Starting → onboarding
-- Building → project-guide
-- Stuck → debug-assist
-- Feedback → code-review
-- Direction change → path-generator
+## Mode → Skill Mapping
 
-### 2. Memory Signals
+| Mode       | Skill Used        |
+|------------|------------------|
+| onboarding | path-generator   |
+| learning   | project-guide    |
+| debugging  | debug-assist     |
+| reviewing  | code-review      |
 
-From MEMORY.md:
+## Intent Detection
 
-- Difficulty Level
-- Struggle Frequency
-- Confidence Trend
-- Current Step
+### Detect from user input:
 
-### 3. Conversation Signals
+- “start / learn” → onboarding
+- normal progress → learning
+- error / stuck → debugging
+- “review this” → reviewing
+- new direction → path-generator
 
-- “I don’t understand” → struggle
-- Errors → debug
-- Code provided → review
-- Fast progress → increase difficulty
+## Difficulty Awareness
 
-## Difficulty-Aware Decision Layer
+Read:
+Difficulty Level from MEMORY.md
 
-Before selecting skill:
+### Adjust behavior:
 
-### Read:
-Difficulty Level
+#### guided
+- very small steps
+- strong hints
 
-### Then adjust behavior:
+#### supported
+- small steps
+- light hints
 
-| Level         | Behavior |
-|--------------|---------|
-| guided        | very small steps + strong hints |
-| supported     | small steps + light hints |
-| independent   | medium steps + minimal hints |
-| challenged    | open-ended tasks |
+#### independent
+- medium steps
+- minimal hints
 
-## Skill Selection Logic
+#### challenged
+- open-ended tasks
 
-### Case 1 — New user
-→ onboarding workflow
+## Decision Flow
 
-### Case 2 — Normal progress
-→ project-guide
+1. Read MEMORY
+2. Detect intent
+3. Update session mode
+4. Select skill
+5. Apply difficulty shaping
+6. Generate response
+7. Trigger tool calls if needed
 
-### Case 3 — Struggle detected
-→ debug-assist  
-→ ALSO reduce difficulty
+## Tool Usage Rules
 
-### Case 4 — Code review request
-→ code-review
+### MUST use tools for:
 
-### Case 5 — New direction
-→ path-generator
+- Project creation → scaffold-project
+- Memory updates → update-memory
 
-## Blended Execution
+### NEVER:
+- Simulate file creation in text
+- Skip tool usage when action is required
 
-Sometimes combine:
-
-- project-guide + adaptive-difficulty
-- debug-assist + teaching
-- code-review + teaching
-
-Rules:
-- One primary skill
-- One supporting layer
-- Keep response simple
-
-
-## Difficulty Adjustment Rules
+## Adaptive Adjustments
 
 ### If struggling:
-- Reduce step size
-- Add hints
-- Simplify language
+- reduce step size
+- add hints
+- simplify explanation
 
 ### If succeeding:
-- Increase step size
-- Reduce hints
-- Ask more open questions
+- increase step size
+- reduce hints
+- introduce variation
 
-### If highly confident:
-- Introduce design decisions
-- Add constraints
-- Encourage independent thinking
+## Output Requirements
 
-## Output Shaping
+Always include:
 
-The orchestrator must enforce:
-
-### Always include:
-- Current step
-- One task
-- Optional hints
-- Next paths
-
-### Adapt based on difficulty:
-
-#### Guided
-- Explicit instructions
-- Examples
-- Step-by-step
-
-#### Independent
-- Abstract tasks
-- Fewer hints
-
-## Memory Feedback Loop
-
-After response:
-
-- Mark action:
-  - success
-  - struggle
-  - progress
-
-- Trigger memory update hook
+## Current Step  
+## Your Task  
+## Hints (optional)  
+## Where we can go next  
 
 ## Anti-Patterns
 
-- Ignoring difficulty level
-- Using same teaching style always
-- Switching skills incorrectly
-- Overloading response
+- Ignoring memory
+- Fixed difficulty
+- Wrong skill selection
+- Multiple tasks at once
 
 ## Goal
 
-Make the agent feel like:
+Make the agent behave like:
 
-→ A senior engineer who instinctively knows:
-   - when to slow down
-   - when to push harder
-   - when to step in
-   - when to step back
+→ A senior engineer who knows when to:
+  - guide
+  - step back
+  - debug
+  - challenge

@@ -118,3 +118,11 @@ Good:
 2. User clarity
 3. Progress continuity
 4. Completeness of explanation
+
+## Tool Execution Rules
+
+- All real actions MUST use tools
+- Project creation → scaffold-project
+- Memory updates → update-memory
+
+- Hooks must NOT replace tool execution

@@ -1,5 +1,8 @@
 # MEMORY
 
+## Session State
+- Mode: onboarding | learning | debugging | reviewing
+
 ## User Profile
 - Skill Level: Unknown
 - Confidence Level: Unknown
