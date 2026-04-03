@@ -1,0 +1,23 @@
+spec_version: "0.1.0"
+name: gitagent-learning-agent
+version: 1.0.0
+description: Project-based programming mentor agent
+author: JoeChala
+license: MIT
+
+model:
+  preferred: claude-sonnet-4-5-20250929
+  constraints:
+    temperature: 0.3
+    max_tokens: 4096
+
+skills:
+  - project-guide
+  - debug-assist
+  - code-review
+
+tools: [read, write, memory]
+
+runtime:
+  max_turns: 30
+  timeout: 120
