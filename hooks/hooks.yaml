@@ -5,15 +5,18 @@ hooks:
 
   pre_tool_use:
     - script: scripts/validate-write.sh
-      description: Prevent unsafe or malformed memory/path writes
+      description: Prevent unsafe or malformed writes (memory, paths, projects)
 
   post_response:
     - script: scripts/update-memory.js
-      description: Update MEMORY.md with latest progress
+      description: Update MEMORY.md with structured user progress
 
     - script: scripts/save-paths.sh
-      description: Persist newly generated learning paths
+      description: Persist new learning paths into memory/learning-paths/
+
+    - script: scripts/scaffold-project.js
+      description: Generate real project files from templates/
 
   on_error:
     - script: scripts/error-handler.sh
-      description: Handle failures and log issues safely
+      description: Log errors and prevent agent failure cascade
