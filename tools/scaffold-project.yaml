@@ -2,6 +2,7 @@ name: scaffold-project
 description: Scaffold a real project from predefined templates
 
 input_schema:
+  type: object
   properties:
     template:
       type: string

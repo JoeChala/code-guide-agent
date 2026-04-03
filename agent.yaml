@@ -12,7 +12,7 @@ model:
     max_tokens: 4096
 
 skills:
-  -adaptive-difficulty
+  - adaptive-difficulty
   - skill-orchestrator
   - project-guide
   - debug-assist
@@ -20,9 +20,6 @@ skills:
   - path-generator
 
 tools:
-  - read
-  - write
-  - memory
   - scaffold-project
   - update-memory
 
@@ -40,78 +37,54 @@ metadata:
 
 compliance:
   risk_tier: standard
-  frameworks: [educational_best_practices]
+  frameworks: []
 
   supervision:
     human_in_the_loop: advisory
     escalation_triggers:
-      - confusion_detected: true
-      - repeated_failure: true
-    override_capability: true
-    kill_switch: false
+      - error_detected: true
+      - confidence_below: 0.5
 
   recordkeeping:
     audit_logging: true
     retention_period: 30d
     immutable: false
     log_contents:
-      - user_progress
-      - learning_paths
-      - decisions
+      - prompts_and_responses
+      - tool_calls
+      - timestamps
 
   model_risk:
-    validation_cadence: periodic
+    validation_cadence: quarterly
     ongoing_monitoring: true
 
-  data_governance:
-    pii_handling: prohibit
-    data_classification: internal
-    consent_required: false
-    bias_testing: false
-
   communications:
-    type: educational
+    type: correspondence
     fair_balanced: true
     no_misleading: true
-    disclosures_required: false
 
   segregation_of_duties:
     roles:
       - id: mentor
-        description: Guides user learning and provides tasks
-        permissions: [guide, explain, suggest]
+        description: Guides user learning and provides structured tasks
+        permissions: [create, submit]
 
       - id: reviewer
         description: Reviews user code and provides feedback
-        permissions: [review, suggest]
+        permissions: [review, approve, reject]
 
       - id: debugger
-        description: Assists with debugging and issue resolution
-        permissions: [diagnose, guide]
+        description: Helps diagnose and resolve coding issues
+        permissions: [execute]
 
       - id: planner
-        description: Generates and updates learning paths
-        permissions: [create, update]
+        description: Generates and manages learning paths
+        permissions: [create]
 
     conflicts:
       - [mentor, reviewer]
-      - [reviewer, debugger]
 
     assignments:
       gitagent-learning-agent: [mentor, debugger, reviewer, planner]
-
-    isolation:
-      state: shared
-      credentials: shared
-
-    handoffs:
-      - action: debug_issue
-        required_roles: [mentor, debugger]
-
-      - action: review_code
-        required_roles: [mentor, reviewer]
-
-      - action: generate_learning_path
-        required_roles: [mentor, planner]
 
     enforcement: advisory

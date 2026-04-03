@@ -1,6 +1,7 @@
 name: update-memory
 description: Update MEMORY.md with structured state
 input_schema:
+  type: object
   properties:
     skill_level:
       type: string
